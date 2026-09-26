@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vildema"
+version = "0.0.1"
+description = "A small file-based database library."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+tui = [
+    "textual>=0.60",
+    "numpy>=1.21",
+    "pillow>=9.0",
+]
+dev = [
+    "mypy>=1.10",
+    "textual>=0.60",
+    "numpy>=1.21",
+    "pillow>=9.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+vildema = ["py.typed", "data/*.json"]
+
+# ---------------------------------------------------------------------------
+# Type checking: strict mode. Every function must be fully annotated, and
+# implicit `Any` is treated as an error. This is the gate that "forces
+# everything to be typed".
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+packages = ["vildema"]
+strict = true
+
+# Extras beyond `strict` that tighten the net further:
+warn_unreachable = true        # flag code that can never run
+disallow_any_unimported = true # a missing stub can't silently become Any
+warn_no_return = true
+no_implicit_reexport = true
+
+# Make the report explicit about *why* something failed.
+show_error_codes = true
+pretty = true
+
+# numpy's array methods are typed as returning Any, which trips `warn_return_any`
+# on the image renderer. Relax just that one flag for that one module; the rest
+# of the strict net (including full annotations) still applies.
+[[tool.mypy.overrides]]
+module = "vildema.tui.image"
+warn_return_any = false
