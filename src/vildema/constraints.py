@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 from typing import Any, Callable, List, Sequence
 from collections.abc import Container
@@ -60,9 +62,9 @@ class C:
     segments = self.name.split(C.SEP)
     if all(_PLAIN_SEGMENT.match(s) for s in segments if s):
       prefix = self.name
-      matches = lambda col: col == prefix or col.startswith(prefix + C.SEP)
+      matches: Callable[[str, ...], bool] = lambda col, *args: col == prefix or col.startswith(prefix + C.SEP)
     else:
-      matches = re.compile(self.name).search
+      matches: Callable[[str, ...], bool] = re.compile(self.name).search
     return [C(col, self.missing_value) for col in columns if matches(col)]
 
 

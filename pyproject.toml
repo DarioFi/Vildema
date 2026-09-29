@@ -7,7 +7,9 @@ name = "vildema"
 version = "0.0.1"
 description = "A small file-based database library."
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "tqdm>=4.60",
+]
 
 [project.optional-dependencies]
 tui = [
@@ -17,6 +19,7 @@ tui = [
 ]
 dev = [
     "mypy>=1.10",
+    "types-tqdm",
     "textual>=0.60",
     "numpy>=1.21",
     "pillow>=9.0",

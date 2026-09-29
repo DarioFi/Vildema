@@ -10,6 +10,8 @@ config: they change every call and are passed straight to
 `Database().load_from_disk(paths=...)`.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, replace
 from typing import Any, Literal, Tuple
 

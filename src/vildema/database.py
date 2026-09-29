@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import copy
-from typing import Callable, List, Sequence
+from typing import Callable, Iterable, List, Sequence
 
 from .config import PathPattern, VildemaConfig, resolve_config
 from .constraints import C, ImplementedC
@@ -98,7 +100,7 @@ class Database:
       # to use an `if __name__ == "__main__"` guard. Explicit fork preserves
       # support for existing unguarded scripts.
       with ProcessPoolExecutor(mp_context=get_context("fork")) as executor:
-        values = executor.map(func, self.entries, chunksize=1)
+        values: Iterable[object] = executor.map(func, self.entries, chunksize=1)
 
         if show_progress:
           from tqdm import tqdm
@@ -107,7 +109,7 @@ class Database:
         for entry, value in zip(self.entries, values):
           entry[name] = value
     else:
-      entries = self.entries
+      entries: Iterable[ExperimentData] = self.entries
       if show_progress:
         from tqdm import tqdm
         entries = tqdm(entries, desc=name)
